@@ -30,7 +30,7 @@ class Helper
 
     public function cachedClientAuth(
         $reauth = false,
-        $config = '/srv/pagely/conf/mgmt-client.conf',
+        $config = 'atomic-client.conf',
         $cache = null
     )
     {
@@ -38,6 +38,8 @@ class Helper
             $cachefile = getenv('STAGE') && !getenv('PROD_OVERRIDE') ? '.atomic-staging.auth' : '.atomic.auth';
             $cache = getenv('HOME')."/{$cachefile}";
         }
+
+        $config = getenv('HOME').'/'.$config;
 
         if (file_exists($config))
         {
@@ -50,15 +52,10 @@ class Helper
             return json_decode(file_get_contents($cache));
         }
 
-        if (file_exists('/srv/pagely/conf/mgmt-client.conf'))
-        {
-            $dotenv = new Dotenv('/srv/pagely/conf', 'mgmt-client.conf');
-            $dotenv->load();
-        }
-        $clientId = getenv('PAGELY_CLIENT_ID');
-        $clientSecret = getenv('PAGELY_CLIENT_SECRET');
+        $clientId = getenv('ATOMIC_CLIENT_ID');
+        $clientSecret = getenv('ATOMIC_CLIENT_SECRET');
 
-        $auth = $this->ApiClient(AuthApi::class);
+        $auth = $this->apiClient(AuthApi::class);
         $token = json_decode($auth->clientLogin($clientId, $clientSecret)->getBody()->getContents());
         file_put_contents($cache, json_encode($token));
 
