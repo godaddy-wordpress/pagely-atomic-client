@@ -21,22 +21,31 @@ echo "PATH=$PWD/bin:\$PATH" >> ~/.bashrc
 ```
 
 # Using the client
-## Login
+## Authentication
+
+You can authenticate either as your Atomic user _or_ with an API client key.
+
+### Authenticating as your Atomic user
+
 ```bash
 atomic auth:login my@atomic-username.com
 ```
 
-This will save a login token to `~/.atomiclogin`. The login will be good for 14 hours.  After that you will need to login again.
-This file will automatically be read by all other commands and used for authorization
-to the Pagely API.
+This saves an auth token to `~/.atomiclogin`.
 
-You may also use your API keys to log in using the `auth:client-login` command:
+### Authenticating with an API key
 
 ```bash
 atomic auth:client-login <clientId> <clientSecret>
 ```
 
-When done, you may use the `auth:logout` command or simply remove the `~/.atomiclogin` file.
+This saves a token to `~/.atomicclientlogin`.
+
+---
+
+Regardless of how you authenticate, when you are done you can use the `auth:logout` command or simply remove the `~/.atomiclogin`/`~/.atomicclientlogin` file.
+
+**NOTE:** If both are present, Atomic user tokens take precedence over API client tokens. If you have a user token you need to run `auth:logout` or manually remove the `~/.atomiclogin` file before you can run commands with your API client credentials.
 
 ## Commands
 
