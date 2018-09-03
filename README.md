@@ -13,6 +13,13 @@ cd atomic-client/
 composer install
 ```
 
+Optionally, enable tab-completion and add the `atomic` client to your `$PATH`:
+
+```
+$ ./bin/atomic _completion --generate-hook --program atomic >> ~/.bashrc
+$ echo "PATH=$PWD/bin:\$PATH" >> ~/.bashrc
+```
+
 # Using the client
 ## Login
 ```
