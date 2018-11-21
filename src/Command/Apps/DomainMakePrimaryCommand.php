@@ -30,7 +30,7 @@ class DomainMakePrimaryCommand extends Command
     {
         parent::configure();
         $this
-            ->setDescription('Add a domain name to an app')
+            ->setDescription('Set the primary alias for an app')
             ->addArgument('appId', InputArgument::REQUIRED, 'App ID')
             ->addArgument('domainId', InputArgument::REQUIRED, 'Domain ID')
         ;

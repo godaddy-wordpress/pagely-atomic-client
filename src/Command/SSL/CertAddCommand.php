@@ -15,7 +15,7 @@ class CertAddCommand extends AbstractSSLCmd
     {
         parent::configure();
         $this
-            ->setDescription('List CSRs for an account')
+            ->setDescription('Import a cert with an existing CSR')
             ->addArgument('account', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('certificateFile', InputArgument::OPTIONAL, 'Certificate file (you may also pipe the certificate to this command)')
             ->addOption('certChainFile', null, InputOption::VALUE_REQUIRED, 'Certificate Chain file (usually unnecessary)')

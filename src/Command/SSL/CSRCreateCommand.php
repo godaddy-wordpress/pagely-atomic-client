@@ -14,7 +14,7 @@ class CSRCreateCommand extends AbstractSSLCmd
     {
         parent::configure();
         $this
-            ->setDescription('List CSRs for an account')
+            ->setDescription('Generate a CSR')
             ->addArgument('account', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('commonName', InputArgument::REQUIRED, 'Common name for CSR (usually domain name)')
             ->addArgument('countryName', InputArgument::OPTIONAL, 'Country abbreviation', 'US')
