@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use GuzzleHttp\Exception\BadResponseException;
+
 class CertImportCommand extends AbstractSSLCmd
 {
     protected $commandName = 'ssl:cert:import';
@@ -38,16 +40,17 @@ class CertImportCommand extends AbstractSSLCmd
         $cert = $input->getArgument('cert');
         $privateKey = $input->getArgument('privateKey');
 
-        $response = $this->api->import(
-            $this->token->token,
-            $input->getArgument('accountId'),
-            $this->getFile($input->getOption('csr')),
-            $this->getFile($input->getArgument('privateKey')),
-            $this->getFile($input->getArgument('cert')),
-            $this->getFile($input->getOption('chain'))
-        );
-
-        if ($response->getStatusCode() >= 400) {
+        try {
+            $response = $this->api->import(
+                $this->token->token,
+                $input->getArgument('accountId'),
+                $this->getFile($input->getOption('csr')),
+                $this->getFile($input->getArgument('privateKey')),
+                $this->getFile($input->getArgument('cert')),
+                $this->getFile($input->getOption('chain'))
+            );
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
             $this->output->writeln("<error>Could not import cert</error>");
             $this->output->writeln($response->getStatusCode()." - ".$response->getBody()->getContents());
             exit(1);
