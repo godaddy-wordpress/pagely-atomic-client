@@ -15,7 +15,8 @@ class CertActivateCommand extends AbstractSSLCmd
         parent::configure();
         $this->setDescription('Marks a certificate as active for a specific app')
             ->addArgument('certID', InputArgument::REQUIRED, 'Certificate ID')
-            ->addArgument('appId', InputArgument::REQUIRED, 'App ID');
+            ->addArgument('appId', InputArgument::REQUIRED, 'App ID')
+            ->addArgument('aliasId', InputArgument::OPTIONAL, 'Alias ID');
         $this->addOauthOptions();
     }
 
@@ -24,7 +25,8 @@ class CertActivateCommand extends AbstractSSLCmd
         $r = $this->api->activateCertForApp(
             $this->token->token,
             $input->getArgument('certID'),
-            $input->getArgument('appId')
+            $input->getArgument('appId'),
+            $input->getArgument('aliasId')
         );
         if ($r->getStatusCode() === 200) {
             $output->writeln('Success');
