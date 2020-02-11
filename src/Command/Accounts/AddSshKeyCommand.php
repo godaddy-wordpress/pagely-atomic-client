@@ -32,6 +32,7 @@ class AddSshKeyCommand extends Command
         parent::configure();
         $this
             ->setDescription('Add a ssh key for an account - feed ssh key in via stdin')
+            ->addUsage('Feed ssh key to command via stdin. Example: cat /path/to/my.key | ./bin/atomic account:ssh:add 37')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
         ;
         $this->addOauthOptions();
