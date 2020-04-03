@@ -189,4 +189,32 @@ class AppsClient extends BaseApiClient
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->delete("apps/{$appId}");
     }
+
+    //
+    // Git integration methods
+    //
+    public function createGitIntegration(string $accessToken,int $appId, string $remoteProvider, string $branch): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->post("/apps/{$appId}/git-integration",
+                [
+                    'json' =>[
+                        'remote' => $remoteProvider,
+                        'branch' => $branch,
+                    ]
+                ]
+            );
+    }
+
+    public function deleteGitIntegration(string $accessToken, int $appId): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->delete("/apps/{$appId}/git-integration");
+    }
+
+    public function getGitIntegration(string $accessToken,int $appId): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->get("/apps/{$appId}/git-integration");
+    }
 }
