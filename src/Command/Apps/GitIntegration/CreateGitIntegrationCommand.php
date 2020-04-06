@@ -2,10 +2,11 @@
 
 namespace Pagely\AtomicClient\Command\Apps\GitIntegration;
 
-use Pagely\Client\AuthApi;
-use Pagely\Client\Command\Command;
-use Pagely\Client\Command\OauthCommandTrait;
-use Pagely\Client\AppsApi\AppsClient;
+use Pagely\AtomicClient\API\AuthApi;
+use Pagely\AtomicClient\Command\ApiErrorOutputTrait;
+use Pagely\AtomicClient\Command\Command;
+use Pagely\AtomicClient\Command\OauthCommandTrait;
+use Pagely\AtomicClient\API\Apps\AppsClient;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateGitIntegrationCommand extends Command
 {
     use OauthCommandTrait;
+    use ApiErrorOutputTrait;
 
     /**
      * @var AppsClient
@@ -43,12 +45,18 @@ class CreateGitIntegrationCommand extends Command
         $token = $this->token->token;
         $output->writeln('Create integration initiated.');
 
-        $this->api->createGitIntegration(
-            $token,
-            (int) $input->getArgument('appId'),
-            strtolower($input->getArgument('remote')),
-            $input->getArgument('branch')
-        );
+        try {
+            $r = $this->api->createGitIntegration(
+                $token,
+                (int) $input->getArgument('appId'),
+                strtolower($input->getArgument('remote')),
+                $input->getArgument('branch')
+            );
+        } catch (\Throwable $e) {
+            $this->getFormattedErrorMessages($input, $output, $e);
+            return 1;
+        }
+
 
         $output->writeln('Create integration executed.');
         return 0;

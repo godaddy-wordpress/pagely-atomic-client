@@ -2,10 +2,11 @@
 
 namespace Pagely\AtomicClient\Command\Apps\GitIntegration;
 
-use Pagely\Client\AuthApi;
-use Pagely\Client\Command\Command;
-use Pagely\Client\Command\OauthCommandTrait;
-use Pagely\Client\AppsApi\AppsClient;
+use Pagely\AtomicClient\API\AuthApi;
+use Pagely\AtomicClient\Command\ApiErrorOutputTrait;
+use Pagely\AtomicClient\Command\Command;
+use Pagely\AtomicClient\Command\OauthCommandTrait;
+use Pagely\AtomicClient\API\Apps\AppsClient;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DeleteGitIntegrationCommand extends Command
 {
     use OauthCommandTrait;
+    use ApiErrorOutputTrait;
 
     /**
      * @var AppsClient
@@ -40,10 +42,15 @@ class DeleteGitIntegrationCommand extends Command
     {
         $token = $this->token->token;
 
-        $this->api->deleteGitIntegration(
-            $token,
-            (int) $input->getArgument('appId')
-        );
+        try {
+            $this->api->deleteGitIntegration(
+                $token,
+                (int)$input->getArgument('appId')
+            );
+        } catch (\Throwable $e) {
+            $this->getFormattedErrorMessages($input, $output, $e);
+            return 1;
+        }
 
         $output->writeln('Delete integration executed.');
         return 0;
