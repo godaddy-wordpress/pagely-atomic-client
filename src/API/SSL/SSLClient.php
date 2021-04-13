@@ -12,6 +12,11 @@ class SSLClient extends BaseApiClient
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("ssl/certs/{$id}", ['query' => ['includeChain' => $includeChain]]);
     }
 
+    public function getLetsencryptStatus($accessToken,  $jobId)
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("/api/ssl/letsencrypt/status/{$jobId}");
+    }
+
     public function listCerts($accessToken, $accountId, $appId, $includeChain = false)
     {
         return $this->listCertsAsync($accessToken, $accountId, $appId, $includeChain)->wait();
