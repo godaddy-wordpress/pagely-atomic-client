@@ -14,7 +14,7 @@ class LetsencryptJobStatusCommand extends AbstractSSLCmd
     {
         parent::configure();
         $this->setDescription('Check letsencrypt job status')
-            ->addArgument('jobId', InputArgument::REQUIRED, 'Job id')
+            ->addArgument('id', InputArgument::REQUIRED, 'ID of the letsencrypt job (not jobId)')
         ;
         $this->addOauthOptions();
     }
@@ -23,7 +23,7 @@ class LetsencryptJobStatusCommand extends AbstractSSLCmd
     {
         $r = $this->api->getLetsencryptStatus(
             $this->token->token,
-            $input->getArgument('jobId')
+            $input->getArgument('id')
         );
         $output->writeln($r->getBody()->getContents());
     }
