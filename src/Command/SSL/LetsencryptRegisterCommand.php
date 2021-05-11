@@ -31,8 +31,8 @@ class LetsencryptRegisterCommand extends AbstractSSLCmd
         );
         if ($r->getStatusCode() === 200) {
             $data = json_decode($r->getBody()->getContents());
-            $output->writeln('Successfully queued job: '.$data->jobId);
-            $output->writeln('Check status at: https://mgmt.pagely.com/api/ssl/letsencrypt/status/'.$data->jobId);
+            $output->writeln('Successfully queued job: '.$data->id);
+            $output->writeln('Check status with:    atomic ssl:le:jobstatus '.$data->id);
         } else {
             $output->writeln('<error>Registration failed</error>');
             $output->writeln($r->getBody()->getContents());
