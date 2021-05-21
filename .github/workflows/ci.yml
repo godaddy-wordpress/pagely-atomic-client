@@ -12,4 +12,6 @@ jobs:
         with:
           args: --ignore-platform-reqs
       - uses: php-actions/phpstan@v2
+        with:
+          php_version: 7.4
 
