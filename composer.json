@@ -17,7 +17,7 @@
         "duncan3dc/console": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
         "vlucas/phpdotenv": "^2.4",
-        "monolog/monolog": "^1.21",
+        "monolog/monolog": "^2.0",
         "namshi/cuzzle": "^2.0",
         "ramsey/uuid": "^3.5"
     }
