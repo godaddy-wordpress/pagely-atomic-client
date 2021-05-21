@@ -10,6 +10,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: php-actions/composer@v5
         with:
-          args: -vvv --ignore-platform-reqs
+          args: --ignore-platform-reqs
       - uses: php-actions/phpstan@v2
 
