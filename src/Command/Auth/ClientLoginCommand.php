@@ -42,7 +42,7 @@ class ClientLoginCommand extends Command
             $r = $this->api->clientLogin($input->getArgument('clientId'), $input->getArgument('clientSecret'), $input->getOption('scope'));
         } catch (BadResponseException $e) {
             $output->writeln('<error>Invalid Login</error>');
-            return;
+            return 1;
         }
 
         if ($input->getOption('show')) {
@@ -52,6 +52,7 @@ class ClientLoginCommand extends Command
             $token = new OauthToken();
             $token->saveRaw($r->getBody()->getContents(), 'client');
         }
+        return 0;
     }
 
 }

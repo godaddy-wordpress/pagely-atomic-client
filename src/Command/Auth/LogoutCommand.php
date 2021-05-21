@@ -18,5 +18,6 @@ class LogoutCommand extends Command
         $token = new OauthToken();
         $token->deleteSaved();
         $output->writeln('Logged out. Bye!');
+        return 0;
     }
 }

@@ -33,5 +33,6 @@ class CSRCreateCommand extends AbstractSSLCmd
 
         $r = $this->api->createCSR($token, $accountId, $input->getArgument('commonName'), $input->getArgument('countryName'));
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

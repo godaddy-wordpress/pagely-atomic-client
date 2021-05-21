@@ -28,5 +28,6 @@ class CertListCommand extends AbstractSSLCmd
         $includeChain = $input->getOption('appId');
         $r = $this->api->listCerts($this->token->token, $accountId, $appId, $includeChain);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

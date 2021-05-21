@@ -46,5 +46,6 @@ class RemoveAppCommand extends Command
         );
 
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

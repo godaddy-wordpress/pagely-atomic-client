@@ -47,5 +47,6 @@ class CertLinkCommand extends AbstractSSLCmd
             $output->writeln('<error>Failed Linking</error>');
             $output->writeln($r->getBody()->getContents());
         }
+        return 0;
     }
 }

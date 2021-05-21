@@ -49,5 +49,6 @@ class GetAppCommand extends Command
             $r = $this->api->getById($token, $appId);
         }
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

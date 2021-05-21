@@ -36,5 +36,6 @@ class LetsencryptRenewCommand extends AbstractSSLCmd
             $output->writeln('<error>Failed to renew</error>');
             $output->writeln($e->getResponse()->getBody()->getContents());
         }
+        return 0;
     }
 }

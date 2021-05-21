@@ -24,5 +24,6 @@ class SearchLinkedCommand extends AbstractSSLCmd
         $appId = $input->getArgument('appId');
         $r = $this->api->searchLinkedCerts($this->token->token, $appId);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

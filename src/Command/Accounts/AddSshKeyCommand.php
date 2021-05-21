@@ -40,7 +40,7 @@ class AddSshKeyCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $accountId = $input->getArgument('accountId');
+        $accountId = (int) $input->getArgument('accountId');
         $token = $this->token->token;
         $key = '';
         while (!feof(STDIN)) {

@@ -33,5 +33,6 @@ class LetsencryptCertCommand extends AbstractSSLCmd
             $output->writeln('<error>Queueing Job Failed</error>');
             $output->writeln($r->getBody()->getContents());
         }
+        return 0;
     }
 }

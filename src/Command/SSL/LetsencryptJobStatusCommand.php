@@ -26,6 +26,7 @@ class LetsencryptJobStatusCommand extends AbstractSSLCmd
             $input->getArgument('id')
         );
         $output->writeln($r->getBody()->getContents());
+        return 0;
     }
 }
 

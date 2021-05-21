@@ -37,5 +37,6 @@ class LetsencryptRegisterCommand extends AbstractSSLCmd
             $output->writeln('<error>Registration failed</error>');
             $output->writeln($r->getBody()->getContents());
         }
+        return 0;
     }
 }

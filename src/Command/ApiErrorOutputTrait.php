@@ -3,13 +3,8 @@
 namespace Pagely\AtomicClient\Command;
 
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Response;
-use Pagely\AtomicClient\API\AuthApi;
-use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Pagely\AtomicClient\OauthToken;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 trait ApiErrorOutputTrait
@@ -27,7 +22,6 @@ trait ApiErrorOutputTrait
                 $response->getStatusCode(),
                 $response->getReasonPhrase()
             );
-            /** @var StreamInterface $msg */
             $contents = $response->getBody()->getContents();
             $msg = json_decode($contents, true);
 

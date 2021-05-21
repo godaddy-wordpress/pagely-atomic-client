@@ -62,5 +62,6 @@ class AppCertUpdateCommand extends AbstractSSLCmd
                 $output->writeln($r->getBody()->getContents());
                 break;
         }
+        return 0;
     }
 }
