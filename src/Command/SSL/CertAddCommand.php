@@ -43,7 +43,7 @@ class CertAddCommand extends AbstractSSLCmd
         }
         if (!isset($cert) || !$cert) {
             $output->writeln('<error>You must provide a file name or pipe the certificate to this command.</error>');
-            return;
+            return 1;
         }
 
         $certChain = null;
@@ -52,5 +52,6 @@ class CertAddCommand extends AbstractSSLCmd
         }
         $r = $this->api->addCertificate($token, $accountId, $cert, $certChain);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

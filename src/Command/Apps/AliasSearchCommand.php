@@ -51,6 +51,7 @@ class AliasSearchCommand extends Command
         $token = $this->token->token;
 
         $r = $this->api->findAliases($token, $accountId, $search, $names, $appId, $noPressDns);
-        $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        $output->writeln(json_encode(json_decode($r->getBody()->getContents(), true), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

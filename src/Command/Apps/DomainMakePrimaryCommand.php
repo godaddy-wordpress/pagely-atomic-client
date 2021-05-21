@@ -46,5 +46,6 @@ class DomainMakePrimaryCommand extends Command
         $r = $this->api->makePrimary($token, $appId, $domainId);
 
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

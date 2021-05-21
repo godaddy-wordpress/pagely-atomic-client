@@ -36,5 +36,6 @@ class CertGetCommand extends AbstractSSLCmd
 
         $cert = json_decode($r->getBody()->getContents());
         $output->writeln(json_encode($cert, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return 0;
     }
 }

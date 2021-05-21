@@ -56,7 +56,7 @@ class LoginCommand extends Command
         } catch (BadResponseException $e) {
             $output->writeln('<error>Invalid Login</error>');
             $output->writeln($e->getResponse()->getBody()->getContents());
-            return;
+            return 1;
         }
 
         if ($input->getOption('show')) {
@@ -67,5 +67,6 @@ class LoginCommand extends Command
             $token->saveRaw($r->getBody()->getContents());
             $output->writeln('Logged in');
        }
+        return 0;
     }
 }

@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class GuzzleTrait
  * @package Pagely\AtomicClient\Client
- * @property string apiName
+ * @property string $apiName
  */
 trait GuzzleTrait
 {
@@ -34,7 +34,7 @@ trait GuzzleTrait
     protected $guzzleClient;
     protected $allowExceptions = true;
     /**
-     * @var LoggerInterface
+     * @var ?LoggerInterface
      */
     protected $logger;
     /**

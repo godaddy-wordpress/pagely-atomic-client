@@ -33,5 +33,6 @@ class CSRListCommand extends AbstractSSLCmd
 
         $r = $this->api->listCSRs($token, $accountId, $input->getOption('linked'));
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

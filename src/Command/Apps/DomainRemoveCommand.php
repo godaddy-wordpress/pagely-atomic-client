@@ -46,5 +46,6 @@ class DomainRemoveCommand extends Command
         $this->api->removeDomain($token, $appId, $domain);
 
         $output->writeln('Domain removed');
+        return 0;
     }
 }

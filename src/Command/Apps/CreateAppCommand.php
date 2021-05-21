@@ -55,6 +55,7 @@ class CreateAppCommand extends Command
             $multi ?: null
         );
 
-        $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        $output->writeln(json_encode(json_decode($r->getBody()->getContents(), true), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

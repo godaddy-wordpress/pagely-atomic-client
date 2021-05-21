@@ -55,5 +55,6 @@ class ListAppsCommand extends Command
             $r = $this->api->find($token, $accountId);
         }
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        return 0;
     }
 }

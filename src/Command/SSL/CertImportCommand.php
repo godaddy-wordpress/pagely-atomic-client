@@ -58,6 +58,7 @@ class CertImportCommand extends AbstractSSLCmd
 
         $imported = json_decode($response->getBody()->getContents());
         $this->output->writeln(json_encode($imported, JSON_PRETTY_PRINT));
+        return 0;
     }
 
     protected function getFile($path)
