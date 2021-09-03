@@ -14,11 +14,15 @@
     "require": {
         "php": "^7.1",
         "rdlowrey/auryn": "^1.4",
-        "duncan3dc/console": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
         "vlucas/phpdotenv": "^2.4",
         "monolog/monolog": "^1.21",
         "namshi/cuzzle": "^2.0",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^3.5",
+        "symfony/console": "^5.3",
+        "symfony/finder": "^5.3"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.98"
     }
 }
