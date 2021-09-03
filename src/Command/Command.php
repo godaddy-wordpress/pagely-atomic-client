@@ -1,7 +1,6 @@
 <?php
 namespace Pagely\AtomicClient\Command;
 
-class Command extends \duncan3dc\Console\Command
+class Command extends \Symfony\Component\Console\Command\Command
 {
-    protected $lock = false;
 }
