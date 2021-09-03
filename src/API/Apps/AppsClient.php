@@ -193,10 +193,11 @@ class AppsClient extends BaseApiClient
     //
     // Git integration methods
     //
-    public function createGitIntegration(string $accessToken,int $appId, string $remoteProvider, string $branch): \Psr\Http\Message\ResponseInterface
+    public function createGitIntegration(string $accessToken, int $appId, string $remoteProvider, string $branch): \Psr\Http\Message\ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("/apps/{$appId}/git-integration",
+            ->post(
+                "/apps/{$appId}/git-integration",
                 [
                     'json' =>[
                         'remote' => $remoteProvider,
@@ -212,9 +213,28 @@ class AppsClient extends BaseApiClient
             ->delete("/apps/{$appId}/git-integration");
     }
 
-    public function getGitIntegration(string $accessToken,int $appId): \Psr\Http\Message\ResponseInterface
+    public function getGitIntegration(string $accessToken, int $appId): \Psr\Http\Message\ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->get("/apps/{$appId}/git-integration");
+    }
+
+    public function getAppBackups($accessToken, $appId)
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->get("apps/{$appId}/backups");
+    }
+
+    public function getAppBackup($accessToken, $appId, $backupId)
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->get("apps/{$appId}/backups/{$backupId}");
+    }
+
+    public function getLatestAppBackup($accessToken, $appId)
+    {
+        $body = json_decode($this->getAppBackups($accessToken, $appId)->getBody()->getContents(), true);
+        $latest = end($body['data']);
+        return $this->getAppBackup($accessToken, $appId, $latest['id']);
     }
 }
