@@ -2,6 +2,7 @@
 namespace Pagely\AtomicClient\API\Apps;
 
 use Pagely\AtomicClient\API\BaseApiClient;
+use Psr\Http\Message\ResponseInterface;
 
 class AppsClient extends BaseApiClient
 {
@@ -190,10 +191,28 @@ class AppsClient extends BaseApiClient
             ->delete("apps/{$appId}");
     }
 
+    protected function setWebserverType(string $accessToken, $appId, string $type): ResponseInterface
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->post("apps/{$appId}/server-type", [
+                'json' => ['serverType' => $type],
+            ]);
+    }
+
+    public function setWebserverTypeNginx(string $accessToken, int $appId)
+    {
+        return $this->setWebserverType($accessToken, $appId, 'nginx');
+    }
+
+    public function setWebserverTypeApache(string $accessToken, int $appId)
+    {
+        return $this->setWebserverType($accessToken, $appId, 'nginx-apache');
+    }
+
     //
     // Git integration methods
     //
-    public function createGitIntegration(string $accessToken, int $appId, string $remoteProvider, string $branch): \Psr\Http\Message\ResponseInterface
+    public function createGitIntegration(string $accessToken, int $appId, string $remoteProvider, string $branch): ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->post(
@@ -207,13 +226,13 @@ class AppsClient extends BaseApiClient
             );
     }
 
-    public function deleteGitIntegration(string $accessToken, int $appId): \Psr\Http\Message\ResponseInterface
+    public function deleteGitIntegration(string $accessToken, int $appId): ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->delete("/apps/{$appId}/git-integration");
     }
 
-    public function getGitIntegration(string $accessToken, int $appId): \Psr\Http\Message\ResponseInterface
+    public function getGitIntegration(string $accessToken, int $appId): ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->get("/apps/{$appId}/git-integration");
