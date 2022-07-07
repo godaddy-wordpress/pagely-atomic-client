@@ -33,9 +33,11 @@ class CreateAppCommand extends Command
         $this
             ->setDescription('Create new app')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
-            ->addArgument('name', InputArgument::REQUIRED, 'App Name/Domain')
+            ->addArgument('label', InputArgument::REQUIRED, 'App Label (name for the appr to appear as in Atomic)')
             ->addArgument('primaryDomain', InputArgument::REQUIRED, 'Primary Domain')
             ->addOption('multisite', 'm', InputOption::VALUE_REQUIRED, 'Enable multisite type (subdomain or subfolder)')
+            ->addOption('use-label-in-sites-dir', null, InputOption::VALUE_NONE, 'Uses the label you have set as the directory name in the ~/sites/ directory when you login to the server.
+            Without this option, the directory will be named the same as the primaryDomain which is the default behavior when creating a site via Atomic.')
         ;
         $this->addOauthOptions();
     }
@@ -49,10 +51,11 @@ class CreateAppCommand extends Command
         $r = $this->api->createApp(
             $token,
             $input->getArgument('accountId'),
-            $input->getArgument('name'),
+            $input->getArgument('label'),
             $input->getArgument('primaryDomain'),
             !!$multi,
-            $multi ?: null
+            $multi ?: null,
+            $input->getOption('use-label-in-sites-dir')
         );
 
         $output->writeln(json_encode(json_decode($r->getBody()->getContents(), true), JSON_PRETTY_PRINT));

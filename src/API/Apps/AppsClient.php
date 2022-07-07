@@ -113,13 +113,14 @@ class AppsClient extends BaseApiClient
             ->delete("apps/{$appId}/ips/{$ip}");
     }
 
-    public function createApp($accessToken, $accountId, $name, $primaryDomain, $multisite = false, $multisiteType = null)
+    public function createApp($accessToken, $accountId, $label, $primaryDomain, $multisite = false, $multisiteType = null, $useLabelInSitesDir = false)
     {
         $data = [
-            'name' => $name,
+            'label' => $label,
             'accountId' => (int) $accountId,
             'primaryDomain' => $primaryDomain,
             'multisite' => (bool) $multisite,
+            'name' => $useLabelInSitesDir ? $label : $primaryDomain
         ];
         if ($multisiteType) {
             $data['multisiteType'] = $multisiteType;
