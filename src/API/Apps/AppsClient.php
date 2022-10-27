@@ -217,7 +217,7 @@ class AppsClient extends BaseApiClient
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->post(
-                "/apps/{$appId}/git-integration",
+                "apps/{$appId}/git-integration",
                 [
                     'json' =>[
                         'remote' => $remoteProvider,
@@ -230,13 +230,13 @@ class AppsClient extends BaseApiClient
     public function deleteGitIntegration(string $accessToken, int $appId): ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->delete("/apps/{$appId}/git-integration");
+            ->delete("apps/{$appId}/git-integration");
     }
 
     public function getGitIntegration(string $accessToken, int $appId): ResponseInterface
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->get("/apps/{$appId}/git-integration");
+            ->get("apps/{$appId}/git-integration");
     }
 
     public function getAppBackups($accessToken, $appId)
