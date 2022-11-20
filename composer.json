@@ -19,6 +19,6 @@
         "vlucas/phpdotenv": "^2.4",
         "monolog/monolog": "^1.21",
         "namshi/cuzzle": "^2.0",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^4.0"
     }
 }
