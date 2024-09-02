@@ -19,7 +19,7 @@ class LetsencryptJobStatusCommand extends AbstractSSLCmd
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $r = $this->api->getLetsencryptStatus(
             $this->token->token,

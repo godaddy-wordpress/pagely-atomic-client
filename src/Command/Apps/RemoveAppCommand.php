@@ -36,7 +36,7 @@ class RemoveAppCommand extends Command
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $token = $this->token->token;
 

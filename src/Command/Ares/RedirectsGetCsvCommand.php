@@ -39,7 +39,7 @@ class RedirectsGetCsvCommand extends Command
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $appId = (int) $input->getArgument('appId');
         $filename = $input->getArgument('filename');

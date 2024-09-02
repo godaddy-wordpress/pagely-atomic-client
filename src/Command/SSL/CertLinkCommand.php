@@ -22,7 +22,7 @@ class CertLinkCommand extends AbstractSSLCmd
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $certId = $input->getArgument('certID');
         $aliasId = $input->getArgument('aliasID');

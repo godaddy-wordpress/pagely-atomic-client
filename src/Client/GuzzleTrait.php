@@ -133,7 +133,7 @@ trait GuzzleTrait
                         $msg = 'API Request: ' .$request->getMethod(). ' ' .$request->getUri();
                         $logger->debug($msg, [
                             'api' => $this->apiName,
-                            'request' => \GuzzleHttp\Psr7\str($request),
+                            'request' => \GuzzleHttp\Psr7\Message::toString($request),
                             'uri' => $request->getUri(),
                             'method' => $request->getMethod()
                         ]);
@@ -154,8 +154,8 @@ trait GuzzleTrait
                                 if ($response->getStatusCode() >= 400) {
                                     $context = [
                                         'api' => $this->apiName,
-                                        'response' => \GuzzleHttp\Psr7\str($response),
-                                        'request' => \GuzzleHttp\Psr7\str($request),
+                                        'response' => \GuzzleHttp\Psr7\Message::toString($response),
+                                        'request' => \GuzzleHttp\Psr7\Message::toString($request),
                                         'code' => $response->getStatusCode(),
                                         'uri' => $request->getUri(),
                                         'method' => $request->getMethod()

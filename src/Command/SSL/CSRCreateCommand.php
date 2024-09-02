@@ -22,7 +22,7 @@ class CSRCreateCommand extends AbstractSSLCmd
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($output->isDebug()) {
             $this->api->setDebug();

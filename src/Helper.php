@@ -2,7 +2,6 @@
 namespace Pagely\AtomicClient;
 
 use Auryn\Injector;
-use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
 use Monolog\Logger;
 use Monolog\Handler\NullHandler;
@@ -43,7 +42,7 @@ class Helper
 
         if (file_exists($config))
         {
-            $dotenv = new Dotenv(dirname($config), basename($config));
+            $dotenv = \Dotenv\Dotenv::createImmutable(dirname($config), basename($config));
             $dotenv->load();
         }
 
@@ -86,7 +85,7 @@ class Helper
         try
         {
             $home = getenv('HOME');
-            $dotenv = new Dotenv($home, $staging ? '/.atomic-staging' : '/.atomic');
+            $dotenv = \Dotenv\Dotenv::createImmutable($home, $staging ? '/.atomic-staging' : '/.atomic');
             $dotenv->load();
         }
         catch (InvalidPathException $e)
@@ -96,7 +95,7 @@ class Helper
 
         try
         {
-            $dotenv = new Dotenv($baseDir, $staging ? '/.env-staging' : '/.env');
+            $dotenv = \Dotenv\Dotenv::createImmutable($baseDir, $staging ? '/.env-staging' : '/.env');
             $dotenv->load();
         }
         catch (InvalidPathException $e)
@@ -105,7 +104,7 @@ class Helper
         }
 
         // doesn't overwrite so defaults get loaded last
-        $dotenv = new Dotenv($baseDir, $staging ? '/.env.staging' : '/.env.defaults');
+        $dotenv = \Dotenv\Dotenv::createImmutable($baseDir, $staging ? '/.env-staging' : '/.env.defaults');
         $dotenv->load();
     }
 }

@@ -37,7 +37,7 @@ class DomainMakePrimaryCommand extends Command
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $appId = $input->getArgument('appId');
         $domainId = $input->getArgument('domainId');
