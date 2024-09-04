@@ -12,7 +12,7 @@ class BaseApiClient
 
     protected $apiName;
 
-    public function __construct(RequestChain $requestChain, $baseUrl = 'https://mgmt.pagely.com/api/', LoggerInterface $logger)
+    public function __construct(RequestChain $requestChain, LoggerInterface $logger, string $baseUrl = 'https://mgmt.pagely.com/api/')
     {
         $this->requestChain = $requestChain;
         $this->baseUrl = $baseUrl;

@@ -13,7 +13,7 @@ class LogoutCommand extends Command
         parent::__construct($name);
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $token = new OauthToken();
         $token->deleteSaved();

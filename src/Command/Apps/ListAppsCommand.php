@@ -39,7 +39,7 @@ class ListAppsCommand extends Command
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $accountId = $input->getArgument('account');
         $token = $this->token->token;

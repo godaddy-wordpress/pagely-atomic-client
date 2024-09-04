@@ -19,7 +19,7 @@ class SearchLinkedCommand extends AbstractSSLCmd
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $appId = $input->getArgument('appId');
         $r = $this->api->searchLinkedCerts($this->token->token, $appId);

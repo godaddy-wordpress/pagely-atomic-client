@@ -22,7 +22,7 @@ class LetsencryptRenewCommand extends AbstractSSLCmd
         ;
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $r = $this->api->letsencryptRenew(

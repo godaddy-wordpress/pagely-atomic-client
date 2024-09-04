@@ -21,7 +21,7 @@ class LetsencryptRegisterCommand extends AbstractSSLCmd
         $this->addOauthOptions();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $r = $this->api->letsencryptRegister(
             $this->token->token,
