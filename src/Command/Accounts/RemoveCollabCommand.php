@@ -19,9 +19,6 @@ class RemoveCollabCommand extends Command
      */
     protected $api;
 
-    // TODO should this have the option to remove a collaborator from the whole account, not just an app?
-    // or is that another command? (boggle)
-
     public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:remove')
     {
         $this->authClient = $authApi;
@@ -33,20 +30,24 @@ class RemoveCollabCommand extends Command
     {
         parent::configure();
         $this
-            ->setDescription('Remove collaborator from account')
+            ->setDescription('Remove collaborator from account (BROKEN)')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('collabId', InputArgument::REQUIRED, 'Collab User ID')
+            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID', 0)
         ;
         $this->addOauthOptions();
     }
 
+    // TODO this needs to look up the provided info and get the user's current role, so we can feed that
+    // to removeAccess. For now treat it as broken.
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $accountId = $input->getArgument('accountId');
         $collabId = $input->getArgument('collabId');
+        $appId = $input->getArgument('appId');
         $token = $this->token->token;
 
-        $r = $this->api->removeAccess($token, $accountId, $collabId);
+        $r = $this->api->removeAccess($token, $accountId, $collabId, 8, $appId);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
 
         return 0;
