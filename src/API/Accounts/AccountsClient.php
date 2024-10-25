@@ -30,35 +30,6 @@ class AccountsClient extends BaseApiClient
 
     // everything from here down was copied over from mgmt, need to pare it to only the required bits
 
-    public function listAccounts($accessToken, string $search = null, bool $includeNonSubs = false, $supportId = null)
-    {
-        $options = [
-            'query' => [],
-        ];
-        if ($search) {
-            $options['query']['search'] = $search;
-        }
-        if ($includeNonSubs) {
-            $options['query']['includeNonSubs'] = 1;
-        }
-        if (!empty($supportId)) {
-            $options['query']['supportId'] = $supportId;
-        }
-
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get('accounts', $options);
-    }
-
-    public function listAccountsByIds($accessToken, array $accountIds, bool $minimal = false)
-    {
-        $options = [
-            'query' => [
-                'accountIds' => $accountIds,
-                'minimal' => $minimal ? 'true' : 'false',
-            ],
-        ];
-
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get('accounts', $options);
-    }
 
     // definitely in use :)
     public function listAccountCollaborators($accessToken, $accountId, string $access = 'from')
@@ -74,49 +45,14 @@ class AccountsClient extends BaseApiClient
             );
     }
 
-    public function getByPoolId($accessToken, $poolId)
-    {
-        $options = [
-            'query' => [
-                'poolId' => $poolId,
-            ],
-        ];
-
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get('accounts', $options);
-    }
-
-    public function getByBillingCustomerId(string $accessToken, string $id)
+    // ditto
+    public function removeCollaboratorsForApp($accessToken, $accountId, $appId)
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->get("accounts/by-billing/{$id}");
+            ->delete("accounts/{$accountId}/collaborators/apps/{$appId}");
     }
 
-    public function getByUsername(string $accessToken, string $username)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->get('accounts/by-username?username=' . urlencode($username));
-    }
-
-    public function getCapacity($accessToken, array $ids)
-    {
-        $options = [
-            'json' => [
-                'accountIds' => $ids,
-            ],
-        ];
-
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->post('accounts/capacity', $options);
-    }
-
-    public function getAccount($accessToken, $id, $minimal = false)
-    {
-        $query = [];
-        if ($minimal) {
-            $query['query']['minimal'] = 'true';
-        }
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$id}", $query);
-    }
-
+    // doesn't work - the client token doesn't have privs
     public function getAdmins($accessToken, $supportId = null)
     {
         $query = [];
@@ -128,43 +64,7 @@ class AccountsClient extends BaseApiClient
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get('accounts/admins', $query);
     }
 
-    public function getAdmin($accessToken, $id)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/admins/{$id}");
-    }
-
-    public function getGroupPubKeys($accessToken, $groupName)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/group/{$groupName}/keys");
-    }
-
-    public function getCollaboratorAccess($accessToken, $accountId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/access");
-    }
-
-    public function removeCollaboratorsForApp($accessToken, $accountId, $appId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->delete("accounts/{$accountId}/collaborators/apps/{$appId}");
-    }
-
-    public function updateAccount($accessToken, $accountId, array $data)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->patch("accounts/{$accountId}", [
-                'json' => $data,
-            ]);
-    }
-
-    public function updateAdmin($accessToken, $id, array $data)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->patch("accounts/admins/{$id}", [
-                'json' => $data,
-            ]);
-    }
-
+    // fun!
     /**
      * @param string $accessToken
      * @param int|string $targetAccountId
@@ -191,81 +91,6 @@ class AccountsClient extends BaseApiClient
         throw new \Exception('Invalid arguments - must include source & role [& app], or app by itself');
     }
 
-    public function get2fa($accessToken, $accountId, $phone, $userType = 'account')
-    {
-        if ($userType === 'account') {
-            return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-                ->get("accounts/{$accountId}/2fa", [
-                    'query' => ['phone' => $phone],
-                ]);
-        }
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->get("accounts/admins/{$accountId}/2fa", [
-                'query' => ['phone' => $phone],
-            ]);
-    }
-
-    public function getAccountOrAdminBySupportId($accessToken, $supportId)
-    {
-        try {
-            $response = $this->getAdmins($accessToken, $supportId);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
-        if (empty($response)) {
-            $response = $this->listAccounts($accessToken, null, false, $supportId);
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param array $data required: `confirm`, optional: `sendEmail`, `name`, `reason`
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function cancelAccount($accessToken, $accountId, array $data)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("accounts/{$accountId}/cancel-by-admin", [
-                'json' => $data,
-            ]);
-    }
-
-    public function detachAccount($accessToken, $accountId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("accounts/{$accountId}/detach");
-    }
-
-
-    public function createAdmin(
-        string $token,
-        string $username,
-        string $name,
-        string $email,
-        string $phone,
-        string $phoneCountry = '1',
-        ?string $password = null
-    ) {
-        $json = [
-            'name' => $name,
-            'username' => $username,
-            'email' => $email,
-            'phone' => $phone,
-            'phoneCountry' => $phoneCountry,
-        ];
-
-        if ($password) {
-            $json['password'] = $password;
-        }
-
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->post('accounts/admins', [
-                'json' => $json,
-            ]);
-    }
 
     public function getApiKeys(string $token, array $accountIds)
     {
@@ -307,74 +132,6 @@ class AccountsClient extends BaseApiClient
             ]);
     }
 
-    public function enable(string $accessToken, int $accountId, string $reason, string $name)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("accounts/{$accountId}/enable", [
-                'json' => [
-                    'reason' => $reason,
-                    'name' => $name,
-                ],
-            ]);
-    }
-    public function disable(string $accessToken, int $accountId, string $reason, string $name)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("accounts/{$accountId}/disable", [
-                'json' => [
-                    'reason' => $reason,
-                    'name' => $name,
-                ],
-            ]);
-    }
-
-    public function storeSignupInfo(string $accessToken, string $email, string $password)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post('accounts/signup-info', [
-                'json' => [
-                    'email' => $email,
-                    'password' => $password,
-                ],
-            ]);
-    }
-
-    public function passwordReset(string $email, bool $admin = false)
-    {
-        $path = $admin ? 'accounts/admins/password-reset' : 'accounts/password-reset';
-        return $this->guzzle()->post($path, [
-            'json' => [
-                'email' => $email,
-            ],
-        ]);
-    }
-
-    public function passwordResetFinish(string $password, string $token, bool $admin = false)
-    {
-        $path = $admin ? 'accounts/admins/password-reset' : 'accounts/password-reset';
-        return $this->guzzle()->patch($path, [
-            'json' => [
-                'token' => $token,
-                'password' => $password,
-            ],
-        ]);
-    }
-
-    public function listPreProvisionedAccountsForCell(string $token, string $cellId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->get("accounts/pre-provisioned/cellId/{$cellId}");
-    }
-
-    public function getIsGDPR($accessToken, $accountId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/is-gdpr");
-    }
-
-    public function getSecretAnswer(string $token, int $accountId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($token))->get("accounts/{$accountId}/secret-answer");
-    }
 
     public function authenticateUser(string $accessToken, string $username, string $password)
     {
