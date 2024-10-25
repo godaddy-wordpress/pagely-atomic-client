@@ -8,63 +8,19 @@ class AccountsClient extends BaseApiClient
 {
     protected $apiName = 'accounts';
 
-    public const TYPE_ADMIN = 'admin';
-    public const TYPE_EVENT = 'event';
-    public const TYPE_CONFIG = 'config';
-    public const TYPE_ISSUE = 'issue';
-    public const TYPE_CREDENTIALS = 'credentials';
-    public const TYPE_CONTACT = 'contact';
-    public const TYPE_REPORT = 'report';
-
-    // old stuff 
-
-    public function addSshKey(string $accessToken, int $accountId, string $sshKey)
+    public function getCollaboratorAccess($accessToken, $accountId)
     {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post("accounts/{$accountId}/ssh/keys", [
-                'json' => [
-                    'key' => $sshKey
-                ],
-            ]);
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/access");
     }
 
-    // everything from here down was copied over from mgmt, need to pare it to only the required bits
-
-
-    // definitely in use :)
-    public function listAccountCollaborators($accessToken, $accountId, string $access = 'from')
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->get(
-                "accounts/{$accountId}/collaborators",
-                [
-                    'query' => [
-                        'access' => $access,
-                    ],
-                ]
-            );
-    }
-
-    // ditto
     public function removeCollaboratorsForApp($accessToken, $accountId, $appId)
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->delete("accounts/{$accountId}/collaborators/apps/{$appId}");
     }
 
-    // doesn't work - the client token doesn't have privs
-    public function getAdmins($accessToken, $supportId = null)
-    {
-        $query = [];
-
-        if (!empty($supportId)) {
-            $query['query']['supportId'] = $supportId;
-        }
-
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get('accounts/admins', $query);
-    }
-
-    // fun!
+    // This API is both for removing access from individual apps, as well
+    // as removing access for whole accounts. fun!
     /**
      * @param string $accessToken
      * @param int|string $targetAccountId
@@ -103,45 +59,6 @@ class AccountsClient extends BaseApiClient
                 ],
             ]
             );
-    }
-
-    public function fetchIds(string $token, bool $includeNonBilling = false)
-    {
-        $options = [];
-        if ($includeNonBilling) {
-            $options['query'] = ['nonbilling' => 'true'];
-        }
-
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->get('accounts/ids', $options);
-    }
-
-    public function updateAccountLimits(string $token, int $accountId, array $limits = [])
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->patch(sprintf('accounts/%d/limits', $accountId), [
-                'json' => $limits,
-            ]);
-    }
-
-    public function setCellId(string $token, int $accountId, string $cellId)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->patch("accounts/{$accountId}/cell-id", [
-                'json' => ['cellId' => $cellId],
-            ]);
-    }
-
-
-    public function authenticateUser(string $accessToken, string $username, string $password)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-            ->post('accounts/authenticate', [
-                'json' => [
-                    'username' => $username,
-                    'password' => $password,
-                ],
-            ]);
     }
 
     public function listSshPublicKeys(

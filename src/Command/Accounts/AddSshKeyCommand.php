@@ -53,7 +53,7 @@ class AddSshKeyCommand extends Command
         }
 
         try {
-            $this->api->addSshKey($token, $accountId, $key);
+            $this->api->createSshPublicKey($token, $accountId, $key);
         } catch (ClientException $e) {
             $output->writeln('<error>Could not upload ssh key.</error>');
             $output->writeln(
