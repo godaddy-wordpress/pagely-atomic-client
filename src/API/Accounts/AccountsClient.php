@@ -13,7 +13,25 @@ class AccountsClient extends BaseApiClient
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/access");
     }
 
-    public function removeCollaboratorsForApp($accessToken, $accountId, $appId)
+    public function addCollaboratorToAcct(string $accessToken, string $newAcctEmail, string $newAcctName, int $newAcctRole, int $newAcctId)
+    {
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+            ->post("accounts/{$newAcctId}/collaborators", ['json' => [
+                'email' => $newAcctEmail,
+                'name' => $newAcctName,
+                'role' => $newAcctRole,
+                'appId' => 0
+            ],
+        ]);
+    }
+
+    public function removeCollaboratorFromAcct(string $accessToken, string $acctId, string $collabId) {
+        $role = 6; // this is a temp hack, need to actually get user's role somehow
+        return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
+        ->delete("accounts/{$acctId}/collaborators/{$collabId}/{$role}/0");
+    }
+
+    public function removeCollaboratorsForApp(string $accessToken, string $accountId, int $appId)
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
             ->delete("accounts/{$accountId}/collaborators/apps/{$appId}");

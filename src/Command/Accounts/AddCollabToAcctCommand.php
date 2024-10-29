@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveCollabCommand extends Command
+class AddCollabToAcctCommand extends Command
 {
     use OauthCommandTrait;
 
@@ -19,7 +19,7 @@ class RemoveCollabCommand extends Command
      */
     protected $api;
 
-    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:remove')
+    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:add-to-account')
     {
         $this->authClient = $authApi;
         $this->api = $apps;
@@ -30,24 +30,26 @@ class RemoveCollabCommand extends Command
     {
         parent::configure();
         $this
-            ->setDescription('Remove collaborator from account (BROKEN)')
+            ->setDescription('Add collaborator to account')
+            ->addArgument('email', InputArgument::REQUIRED, 'Email address')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
-            ->addArgument('collabId', InputArgument::REQUIRED, 'Collab User ID')
-            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID', 0)
+            ->addArgument('roleId', InputArgument::REQUIRED, 'Role ID')            
+            ->addArgument('name', InputArgument::OPTIONAL, 'Display Name', 0)
         ;
         $this->addOauthOptions();
     }
 
-    // TODO this needs to look up the provided info and get the user's current role, so we can feed that
-    // to removeAccess. For now treat it as broken.
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $accountId = $input->getArgument('accountId');
-        $collabId = $input->getArgument('collabId');
-        $appId = $input->getArgument('appId');
+        $newAcctEmail = $input->getArgument('email');
+        $newAcctName = $input->getArgument('name');
+        if ($newAcctName === 0) { $newAcctName = $input->getArgument('email'); }
+        $newAcctAppId = $input->getArgument('accountId');
+        $newAcctRole = $input->getArgument('roleId');
         $token = $this->token->token;
 
-        $r = $this->api->removeAccess($token, $accountId, $collabId, 8, $appId);
+        $r = $this->api->addCollaboratorToAcct($token,
+            $newAcctEmail, $newAcctName, $newAcctRole, $newAcctAppId);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
 
         return 0;
