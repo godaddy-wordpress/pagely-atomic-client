@@ -1,7 +1,10 @@
 <?php
 
+// TODO remove this it was a testing stub :V
+
 namespace Pagely\AtomicClient\Command\Accounts;
 
+use League\CLImate\TerminalObject\Dynamic\Input;
 use Pagely\AtomicClient\API\Accounts\AccountsClient;
 use Pagely\AtomicClient\API\AuthApi;
 use Pagely\AtomicClient\Command\Command;
@@ -10,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveCollabFromAcctCommand extends Command
+class GetCollabRoleCommand extends Command
 {
     use OauthCommandTrait;
 
@@ -19,7 +22,7 @@ class RemoveCollabFromAcctCommand extends Command
      */
     protected $api;
 
-    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:remove')
+    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:get-role')
     {
         $this->authClient = $authApi;
         $this->api = $apps;
@@ -30,10 +33,10 @@ class RemoveCollabFromAcctCommand extends Command
     {
         parent::configure();
         $this
-            ->setDescription('Remove collaborator from account')
+            ->setDescription('Get collaborator role on account or specific app')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
-            ->addArgument('collabId', InputArgument::REQUIRED, 'Collab User ID')
-            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID, or 0 for all apps', 0)
+            ->addArgument('collabId', InputArgument::REQUIRED, 'Collab user ID')
+            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID', 0)
         ;
         $this->addOauthOptions();
     }
@@ -45,8 +48,8 @@ class RemoveCollabFromAcctCommand extends Command
         $appId = $input->getArgument('appId');
         $token = $this->token->token;
 
-        $r = $this->api->removeCollaboratorFromAcct($token, $accountId, $collabId, $appId);
-        $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
+        $r = $this->api->getCollabRole($token, $accountId, $collabId, $appId);
+        print_r($r);
 
         return 0;
     }

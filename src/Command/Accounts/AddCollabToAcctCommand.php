@@ -19,13 +19,14 @@ class AddCollabToAcctCommand extends Command
      */
     protected $api;
 
-    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:add-to-account')
+    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:add')
     {
         $this->authClient = $authApi;
         $this->api = $apps;
         parent::__construct($name);
     }
 
+    // TODO the role should probably be an enum with actually useful text values instead of random ints
     public function configure()
     {
         parent::configure();
@@ -33,7 +34,7 @@ class AddCollabToAcctCommand extends Command
             ->setDescription('Add collaborator to account')
             ->addArgument('email', InputArgument::REQUIRED, 'Email address')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
-            ->addArgument('roleId', InputArgument::REQUIRED, 'Role ID')            
+            ->addArgument('roleId', InputArgument::REQUIRED, 'Role ID')
             ->addArgument('name', InputArgument::OPTIONAL, 'Display Name', 0)
         ;
         $this->addOauthOptions();

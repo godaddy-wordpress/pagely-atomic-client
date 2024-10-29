@@ -41,7 +41,7 @@ class ListCollabsCommand extends Command
         $accountId = $input->getArgument('accountId');
         $token = $this->token->token;
 
-        $r = $this->api->getCollaboratorAccess($token, $accountId);
+        $r = $this->api->getCollaborators($token, $accountId);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
 
         return 0;

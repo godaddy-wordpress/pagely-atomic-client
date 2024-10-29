@@ -8,9 +8,23 @@ class AccountsClient extends BaseApiClient
 {
     protected $apiName = 'accounts';
 
-    public function getCollaboratorAccess($accessToken, $accountId)
+    public function getCollaborators(string $accessToken, string $accountId)
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/access");
+    }
+
+    public function getCollabRole(string $accessToken, int $accountId, int $collabId, int $appId = 0): int
+    {
+        $r = $this->getCollaborators($accessToken, $accountId);
+        $collabInfo = json_decode($r->getBody()->getContents(), true);
+        foreach(@$collabInfo['whoCanAccess'] as $tidbit) {
+            // print_r($tidbit);
+            // should this output be validated or similar?
+            if (($tidbit['appId'] == $appId) && ($tidbit['sourceId'] == $collabId)) {
+                return $tidbit['role'];
+            }
+        }
+        return 0;
     }
 
     public function addCollaboratorToAcct(string $accessToken, string $newAcctEmail, string $newAcctName, int $newAcctRole, int $newAcctId)
@@ -25,10 +39,11 @@ class AccountsClient extends BaseApiClient
         ]);
     }
 
-    public function removeCollaboratorFromAcct(string $accessToken, string $acctId, string $collabId) {
-        $role = 6; // this is a temp hack, need to actually get user's role somehow
+    public function removeCollaboratorFromAcct(string $accessToken, int $acctId, int $collabId, int $appId = 0) {
+        // $role = 6; // this is a temp hack, need to actually get user's role somehow
+        $role = $this->getCollabRole($accessToken, $acctId, $collabId, $appId);
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))
-        ->delete("accounts/{$acctId}/collaborators/{$collabId}/{$role}/0");
+        ->delete("accounts/{$acctId}/collaborators/{$collabId}/{$role}/{$appId}");
     }
 
     public function removeCollaboratorsForApp(string $accessToken, string $accountId, int $appId)
@@ -63,20 +78,6 @@ class AccountsClient extends BaseApiClient
         }
 
         throw new \Exception('Invalid arguments - must include source & role [& app], or app by itself');
-    }
-
-
-    public function getApiKeys(string $token, array $accountIds)
-    {
-        return $this->guzzle($this->getBearerTokenMiddleware($token))
-            ->get(
-                'accounts/apikeys',
-                [
-                'query' => [
-                    'accountIds' => $accountIds,
-                ],
-            ]
-            );
     }
 
     public function listSshPublicKeys(
