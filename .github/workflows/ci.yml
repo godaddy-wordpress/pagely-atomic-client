@@ -13,7 +13,7 @@ jobs:
           args: --ignore-platform-reqs
       - uses: php-actions/phpstan@v2
         with:
-          php_version: 7.4
+          php_version: 8.1
           path: src
           level: 5
 
