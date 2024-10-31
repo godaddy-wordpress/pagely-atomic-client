@@ -16,4 +16,5 @@ jobs:
           php_version: 8.1
           path: src
           level: 5
+          args: --memory-limit=512M
 
