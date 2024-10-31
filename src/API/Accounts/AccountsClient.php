@@ -8,7 +8,7 @@ class AccountsClient extends BaseApiClient
 {
     protected $apiName = 'accounts';
 
-    public function getCollaborators(string $accessToken, string $accountId)
+    public function getCollaborators(string $accessToken, int $accountId)
     {
         return $this->guzzle($this->getBearerTokenMiddleware($accessToken))->get("accounts/{$accountId}/access");
     }
@@ -47,7 +47,7 @@ class AccountsClient extends BaseApiClient
 
     public function createSshPublicKey(
         string $accessToken,
-        string $accountId,
+        int    $accountId,
         string $key,
         ?string $orchestration = null,
         ?string $sshUsername = null,

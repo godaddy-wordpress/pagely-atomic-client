@@ -68,30 +68,30 @@ class AddCollabToAcctCommand extends Command
             case "app-only-minimal":
             case "apponlyminimal":
             case "1":
-                return 1; break;
+                return 1;
             case "app-only":
             case "apponly":
             case "2":
-                return 2; break;
+                return 2;
             case "billing":
             case "4":
-                return 4; break;
+                return 4;
             case "tech":
             case "6":
-                return 6; break;
+                return 6;
             case "sub-admin":
             case "subadmin":
             case "8":
-                return 8; break;
+                return 8;
             case "super-admin":
             case "superadmin":
             case "9":
-                return 9; break;
+                return 9;
             case "owner":
             case "10":
-                return 10; break;
+                return 10;
             default:
-                return false; break;
+                return false;
         }
         return false;
     }
