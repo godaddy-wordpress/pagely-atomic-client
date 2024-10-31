@@ -30,10 +30,10 @@ class RemoveCollabFromAcctCommand extends Command
     {
         parent::configure();
         $this
-            ->setDescription('Remove collaborator from account')
+            ->setDescription('Remove collaborator from account or app')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('collabId', InputArgument::REQUIRED, 'Collab User ID')
-            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID, or 0 for all apps', 0)
+            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID (acct-level if omitted)', 0)
         ;
         $this->addOauthOptions();
     }

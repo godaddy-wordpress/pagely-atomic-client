@@ -26,16 +26,16 @@ class AddCollabToAcctCommand extends Command
         parent::__construct($name);
     }
 
-    // TODO the role should probably be an enum with actually useful text values instead of random ints
     public function configure()
     {
         parent::configure();
         $this
-            ->setDescription('Add collaborator to account')
+            ->setDescription('Add collaborator to account or app')
             ->addArgument('email', InputArgument::REQUIRED, 'Email address')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
-            ->addArgument('roleId', InputArgument::REQUIRED, 'Role ID')
-            ->addArgument('name', InputArgument::OPTIONAL, 'Display Name', 0)
+            ->addArgument('roleId', InputArgument::REQUIRED, 'Role')
+            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID (acct-level if omitted)', 0)
+            ->addArgument('displayName', InputArgument::OPTIONAL, 'Display Name', 0)
         ;
         $this->addOauthOptions();
     }
@@ -43,16 +43,56 @@ class AddCollabToAcctCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $newAcctEmail = $input->getArgument('email');
-        $newAcctName = $input->getArgument('name');
+        $newAcctName = $input->getArgument('displayName');
         if ($newAcctName === 0) { $newAcctName = $input->getArgument('email'); }
-        $newAcctAppId = $input->getArgument('accountId');
-        $newAcctRole = $input->getArgument('roleId');
+        $newAcctId = $input->getArgument('accountId');
+        $newAcctRole = $this->roleToInt($input->getArgument('roleId'));
+        if ($newAcctRole === false) {
+            $output->writeln ("Invalid role, must be one of 'app-only-minimal', 'app-only', 'billing', 'tech', 'sub-admin', 'super-admin', 'owner'");
+            return Command::FAILURE;
+        }
+        $newAppId = $input->getArgument('appId');
         $token = $this->token->token;
 
         $r = $this->api->addCollaboratorToAcct($token,
-            $newAcctEmail, $newAcctName, $newAcctRole, $newAcctAppId);
+            $newAcctEmail, $newAcctName, $newAcctId, $newAcctRole, $newAppId);
         $output->writeln(json_encode(json_decode($r->getBody()->getContents()), JSON_PRETTY_PRINT));
 
         return 0;
+    }
+
+    private function roleToInt(string $role) 
+    {
+        $role = strtolower($role);
+        switch($role) {
+            case "app-only-minimal":
+            case "apponlyminimal":
+            case "1":
+                return 1; break;
+            case "app-only":
+            case "apponly":
+            case "2":
+                return 2; break;
+            case "billing":
+            case "4":
+                return 4; break;
+            case "tech":
+            case "6":
+                return 6; break;
+            case "sub-admin":
+            case "subadmin":
+            case "8":
+                return 8; break;
+            case "super-admin":
+            case "superadmin":
+            case "9":
+                return 9; break;
+            case "owner":
+            case "10":
+                return 10; break;
+            default:
+                return false; break;
+        }
+        return false;
     }
 }
