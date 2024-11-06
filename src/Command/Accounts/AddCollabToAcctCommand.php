@@ -19,10 +19,10 @@ class AddCollabToAcctCommand extends Command
      */
     protected $api;
 
-    public function __construct(AuthApi $authApi, AccountsClient $apps, $name = 'account:collabs:add')
+    public function __construct(AuthApi $authApi, AccountsClient $accounts, $name = 'account:collabs:add')
     {
         $this->authClient = $authApi;
-        $this->api = $apps;
+        $this->api = $accounts;
         parent::__construct($name);
     }
 
