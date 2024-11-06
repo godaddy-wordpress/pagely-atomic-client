@@ -8,6 +8,7 @@ use Pagely\AtomicClient\Command\Command;
 use Pagely\AtomicClient\Command\OauthCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AddCollabToAcctCommand extends Command
@@ -34,8 +35,8 @@ class AddCollabToAcctCommand extends Command
             ->addArgument('email', InputArgument::REQUIRED, 'Email address')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('roleId', InputArgument::REQUIRED, 'Role')
-            ->addArgument('appId', InputArgument::OPTIONAL, 'App ID (acct-level if omitted)', 0)
-            ->addArgument('displayName', InputArgument::OPTIONAL, 'Display Name', 0)
+            ->addOption('appId', null, InputOption::VALUE_OPTIONAL, 'App ID (acct-level if omitted)', 0)
+            ->addOption('displayName', null, InputOption::VALUE_OPTIONAL, 'Display Name', 0)
         ;
         $this->addOauthOptions();
     }
