@@ -35,8 +35,8 @@ class AddCollabToAcctCommand extends Command
             ->addArgument('email', InputArgument::REQUIRED, 'Email address')
             ->addArgument('accountId', InputArgument::REQUIRED, 'Account ID')
             ->addArgument('roleId', InputArgument::REQUIRED, 'Role')
-            ->addOption('appId', null, InputOption::VALUE_OPTIONAL, 'App ID (acct-level if omitted)', 0)
-            ->addOption('displayName', null, InputOption::VALUE_OPTIONAL, 'Display Name', 0)
+            ->addOption('app', null, InputOption::VALUE_OPTIONAL, 'App ID (acct-level if omitted)', 0)
+            ->addOption('displayname', null, InputOption::VALUE_OPTIONAL, 'Display Name', 0)
         ;
         $this->addOauthOptions();
     }
@@ -44,7 +44,7 @@ class AddCollabToAcctCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $newAcctEmail = $input->getArgument('email');
-        $newAcctName = $input->getArgument('displayName');
+        $newAcctName = $input->getArgument('displayname');
         if ($newAcctName === 0) { $newAcctName = $input->getArgument('email'); }
         $newAcctId = $input->getArgument('accountId');
         $newAcctRole = $this->roleToInt($input->getArgument('roleId'));
@@ -52,7 +52,7 @@ class AddCollabToAcctCommand extends Command
             $output->writeln ("Invalid role, must be one of 'app-only-minimal', 'app-only', 'billing', 'tech', 'sub-admin', 'super-admin', 'owner'");
             return Command::FAILURE;
         }
-        $newAppId = $input->getArgument('appId');
+        $newAppId = $input->getArgument('app');
         $token = $this->token->token;
 
         $r = $this->api->addCollaboratorToAcct($token,

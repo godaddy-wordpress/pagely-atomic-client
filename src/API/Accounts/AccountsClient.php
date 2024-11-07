@@ -45,7 +45,7 @@ class AccountsClient extends BaseApiClient
         ->delete("accounts/{$acctId}/collaborators/{$collabId}/{$role}/{$appId}");
     }
 
-    // this is named createSshPublicKey in the upstream mgmt-client codebase
+    // this is named createSshPublicKey in upstream mgmt-client
     public function addSshKey(
         string $accessToken,
         int    $accountId,
