@@ -94,6 +94,6 @@ class AddCollabToAcctCommand extends Command
             default:
                 return false;
         }
-        return false;
+        // return false;
     }
 }
