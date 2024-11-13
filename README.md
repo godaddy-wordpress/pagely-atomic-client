@@ -1,11 +1,11 @@
 # atomic-client
 PHP Library to access the Pagely atomic APIs
 
-*Note that PHP 7.1+ is required*
+*Note that PHP 8.1+ is required*
 
 # Installation
 
-Installation assumes you already have git, PHP7.1+, and composer installed.
+Installation assumes you already have git, PHP 8.1+, and composer installed.
 
 ```bash
 git clone git@github.com:pagely/atomic-client.git
