@@ -44,7 +44,7 @@ class AddCollabToAcctCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $newAcctEmail = $input->getArgument('email');
-        $newAcctName = $input->getArgument('displayname');
+        $newAcctName = $input->getOption('displayname');
         if ($newAcctName === 0) { $newAcctName = $input->getArgument('email'); }
         $newAcctId = $input->getArgument('accountId');
         $newAcctRole = $this->roleToInt($input->getArgument('roleId'));
@@ -52,7 +52,7 @@ class AddCollabToAcctCommand extends Command
             $output->writeln ("Invalid role, must be one of 'app-only-minimal', 'app-only', 'billing', 'tech', 'sub-admin', 'super-admin', 'owner'");
             return Command::FAILURE;
         }
-        $newAppId = $input->getArgument('app');
+        $newAppId = $input->getOption('app');
         $token = $this->token->token;
 
         $r = $this->api->addCollaboratorToAcct($token,
