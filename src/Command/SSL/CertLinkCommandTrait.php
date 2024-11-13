@@ -11,9 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
  */
 trait CertLinkCommandTrait
 {
-    public function addCertLinkOptions() {
-        /** @var Command $this */
-        $this
+    public function addCertLinkOptions(Command $cmd) {
+        $cmd
             ->addOption('hsts', null, InputOption::VALUE_REQUIRED, 'HSTS Cache Length in Seconds')
             ->addOption('http2', null, InputOption::VALUE_REQUIRED, 'En/Disable HTTP2 protocol (0 or 1)')
             ->addOption('tlsConfig', null, InputOption::VALUE_REQUIRED, 'Custom TLS configuration')
