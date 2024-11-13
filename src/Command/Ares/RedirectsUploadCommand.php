@@ -57,6 +57,7 @@ class RedirectsUploadCommand extends Command
         $file = file_get_contents($file);
 
         // parse the csv
+        /** @var array $data */
         $data = array_map('str_getcsv', explode("\n", trim($file)));
 
         $columns = array_values($data[0]);

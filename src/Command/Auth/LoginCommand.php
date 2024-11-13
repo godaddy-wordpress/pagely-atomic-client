@@ -4,6 +4,7 @@ namespace Pagely\AtomicClient\Command\Auth;
 use Pagely\AtomicClient\Command\Command;
 use GuzzleHttp\Exception\BadResponseException;
 use Pagely\AtomicClient\API\AuthApi;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,6 +44,7 @@ class LoginCommand extends Command
         $question = new Question('Password: ');
         $question->setHidden(true);
 
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
         $password = $helper->ask($input, $output, $question);
 

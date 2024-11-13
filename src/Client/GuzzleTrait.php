@@ -66,7 +66,7 @@ trait GuzzleTrait
                         if ($exception) {
                             return false;
                         }
-                        if ($response && $response instanceof Response && $response->getStatusCode() !== 502) {
+                        if ($response instanceof Response && $response->getStatusCode() !== 502) {
                             return false;
                         }
                         return $retries < $this->maxRetries;

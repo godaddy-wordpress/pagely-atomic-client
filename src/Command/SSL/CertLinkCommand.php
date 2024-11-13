@@ -18,7 +18,7 @@ class CertLinkCommand extends AbstractSSLCmd
             ->addArgument('certID', InputArgument::REQUIRED, 'Certificate ID')
             ->addArgument('aliasID', InputArgument::REQUIRED, 'Alias ID')
         ;
-        $this->addCertLinkOptions();
+        $this->addCertLinkOptions($this);
         $this->addOauthOptions();
     }
 

@@ -62,7 +62,7 @@ class AddCollabToAcctCommand extends Command
         return 0;
     }
 
-    private function roleToInt(string $role) 
+    private function roleToInt(string $role)
     {
         $role = strtolower($role);
         switch($role) {
@@ -94,6 +94,5 @@ class AddCollabToAcctCommand extends Command
             default:
                 return false;
         }
-        // return false;
     }
 }
